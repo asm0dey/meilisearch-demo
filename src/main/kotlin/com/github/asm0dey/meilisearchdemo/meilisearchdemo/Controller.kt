@@ -48,15 +48,11 @@ class Controller(val meiliseachClient: Client, val objectMapper: ObjectMapper) {
     }
 
     @GetMapping("/search")
-    fun findBooks(@RequestParam("q") query: String): List<Book> {
-        val hits = meiliseachClient.index("books").search(SearchRequest(query).setHitsPerPage(50))
+    fun findBooks(@RequestParam("q") query: String): List<Book> =
+        meiliseachClient.index("books").search(SearchRequest(query).setHitsPerPage(50))
             .hits
-        return hits
-            .map(HashMap<String, Any>::values)
-            .flatten()
-            .map(Any::toString)
+            .map { objectMapper.writeValueAsString(it) }
             .map { objectMapper.readValue<Book>(it) }
-    }
 }
 
 private const val ISBN = "ISBN"
