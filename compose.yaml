@@ -1,0 +1,8 @@
+services:
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: meilisearch
+    environment:
+      MEILI_MASTER_KEY: random_master_key_12345
+    ports:
+      - "7700:7700"
